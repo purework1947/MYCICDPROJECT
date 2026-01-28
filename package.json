@@ -1,0 +1,17 @@
+{
+  "name": "mycicdproject",
+  "version": "1.0.0",
+  "main": "index.js",
+ "scripts": {
+  "cypress:open": "npx cypress open",
+  "cypress:run": "npx cypress run",
+  "docker:test": "docker build -t cypress-tests ./docker && docker run -it --rm -v $PWD:/app -w /app cypress-tests"
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "cypress": "^14.5.4"
+  }
+}
