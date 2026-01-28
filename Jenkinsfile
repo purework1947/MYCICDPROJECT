@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/<YOUR-GITHUB-REPO>.git', branch: 'main'
+                git url: 'https://github.com/purework1947/MYCICDPROJECT.git', branch: 'main'
             }
         }
 
