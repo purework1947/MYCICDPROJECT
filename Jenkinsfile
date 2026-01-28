@@ -8,7 +8,10 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/purework1947/MYCICDPROJECT.git', branch: 'main'
+                // Use SSH and Jenkins credentials
+                git url: 'git@github.com:purework1947/MYCICDPROJECT.git', 
+                    branch: 'main', 
+                    credentialsId: 'sshkey'
             }
         }
 
@@ -24,7 +27,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    docker run --rm -v \$PWD:/app -w /app ${DOCKER_IMAGE} \
+                    docker run --rm -v ${WORKSPACE}:/app -w /app ${DOCKER_IMAGE} \
                     npx cypress run --spec "cypress/e2e/1-getting-started/todo.cy.js"
                     """
                 }
@@ -34,7 +37,8 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'cypress/videos/**, cypress/screenshots/**', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'cypress/videos/**', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'cypress/screenshots/**', allowEmptyArchive: true
         }
         success {
             echo 'Tests passed!'
