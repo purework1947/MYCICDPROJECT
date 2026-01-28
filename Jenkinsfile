@@ -8,9 +8,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Use SSH and Jenkins credentials
-                git url: 'git@github.com:purework1947/MYCICDPROJECT.git', 
-                    branch: 'main', 
+                git url: 'git@github.com:purework1947/MYCICDPROJECT.git',
+                    branch: 'main',
                     credentialsId: 'sshkey'
             }
         }
