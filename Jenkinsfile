@@ -1,9 +1,13 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'jdk11'
+    }
+
     stages {
 
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
                 checkout scm
             }
@@ -18,28 +22,21 @@ pipeline {
         stage('Run Cypress Tests') {
             steps {
                 sh '''
-                mkdir -p allure-report
+                  rm -rf allure-results
+                  mkdir -p allure-results
+
                   docker run --rm \
-                    -v "$WORKSPACE/allure-report:/app/allure-report" \
+                    -v "$WORKSPACE/allure-results:/app/allure-results" \
                     mycicdproject
                 '''
-            }
-            post {
-                always {
-                    sh '''
-                    docker cp cypress-run:/app/allure-report ./allure-report || true
-                    docker rm cypress-run || true
-                    '''
-                }
             }
         }
 
         stage('Publish Allure Report') {
             steps {
-                publishHTML([
-                    reportDir: 'allure-report',
-                    reportFiles: 'index.html',
-                    reportName: 'Cypress Allure Report'
+                allure([
+                  includeProperties: false,
+                  results: [[path: 'allure-results']]
                 ])
             }
         }

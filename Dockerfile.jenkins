@@ -2,9 +2,10 @@ FROM jenkins/jenkins:lts
 
 USER root
 
-# Install docker CLI
 RUN apt-get update && \
-    apt-get install -y docker.io && \
+    apt-get install -y openjdk-11-jdk docker.io && \
     apt-get clean
+
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 USER jenkins
