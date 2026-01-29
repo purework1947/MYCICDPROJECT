@@ -9,7 +9,7 @@ pipeline {
             }
         }
 
-        stage('Build Cypress Docker Image') {
+        stage('Build Cypress Image') {
             steps {
                 sh 'docker build -t mycicdproject .'
             }
@@ -17,7 +17,11 @@ pipeline {
 
         stage('Run Cypress Tests') {
             steps {
-                sh 'docker run --rm mycicdproject'
+                sh '''
+                docker run --rm \
+                  -v $WORKSPACE:/app \
+                  mycicdproject
+                '''
             }
         }
     }
