@@ -18,15 +18,18 @@ pipeline {
         stage('Run Cypress Tests') {
             steps {
                 sh '''
-                docker run --name cypress-run mycicdproject
+                docker run --rm \
+        --name cypress-run \
+        mycicdproject
                 '''
             }
             post {
                 always {
                     sh '''
-                    docker cp cypress-run:/app/allure-report ./allure-report || true
-                    docker rm cypress-run || true
-                    '''
+                    mkdir -p allure-report
+      docker run --rm \
+        -v "$WORKSPACE/allure-report:/app/allure-report" \
+        mycicdproject
                 }
             }
         }
