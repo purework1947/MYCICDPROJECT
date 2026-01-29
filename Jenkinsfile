@@ -18,9 +18,8 @@ pipeline {
         stage('Run Cypress Tests') {
             steps {
                 sh '''
-                docker run --rm \
-                  -v $WORKSPACE:/app \
-                  mycicdproject
+                docker run --rm mycicdproject
+
                 '''
             }
         }
