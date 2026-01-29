@@ -18,9 +18,26 @@ pipeline {
         stage('Run Cypress Tests') {
             steps {
                 sh '''
-                docker run --rm mycicdproject
-
+                docker run --name cypress-run mycicdproject
                 '''
+            }
+            post {
+                always {
+                    sh '''
+                    docker cp cypress-run:/app/allure-report ./allure-report || true
+                    docker rm cypress-run || true
+                    '''
+                }
+            }
+        }
+
+        stage('Publish Allure Report') {
+            steps {
+                publishHTML([
+                    reportDir: 'allure-report',
+                    reportFiles: 'index.html',
+                    reportName: 'Cypress Allure Report'
+                ])
             }
         }
     }
