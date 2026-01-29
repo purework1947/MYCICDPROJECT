@@ -1,16 +1,15 @@
-// cypress.config.js
 const { defineConfig } = require("cypress");
+const allureWriter = require("@shelex/cypress-allure-plugin/writer");
 
 module.exports = defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
-      const allureWriter = require("allure-cypress");
+      // Add Allure plugin
       allureWriter(on, config);
       return config;
     },
   },
-  reporter: 'mochawesome', // optional
   env: {
-    allureResultsPath: 'allure-results' // must match Docker volume path
-  }
+    allureResultsPath: 'allure-results'
+  },
 });

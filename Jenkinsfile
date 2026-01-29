@@ -1,33 +1,34 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'jdk11'
+    environment {
+        CYPRESS_RESULTS = "${WORKSPACE}/allure-results"
     }
 
     stages {
-
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Build Cypress Image') {
+        stage('Build Cypress Docker Image') {
             steps {
-                sh 'docker build -t mycicdproject .'
+                sh '''
+                docker build --no-cache -t mycicdproject .
+                '''
             }
         }
 
         stage('Run Cypress Tests') {
             steps {
                 sh '''
-                  rm -rf allure-results
-                  mkdir -p allure-results
+                # Clean previous results
+                rm -rf allure-results
+                mkdir -p allure-results
 
-                  docker run --rm \
-                    -v "$WORKSPACE/allure-results:/app/allure-results" \
-                    mycicdproject
+                # Run Cypress inside Docker and mount results folder
+                docker run --rm -v $CYPRESS_RESULTS:/app/allure-results mycicdproject
                 '''
             }
         }
@@ -35,10 +36,16 @@ pipeline {
         stage('Publish Allure Report') {
             steps {
                 allure([
-                  includeProperties: false,
-                  results: [[path: 'allure-results']]
+                    includeProperties: false,
+                    results: [[path: 'allure-results']]
                 ])
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
         }
     }
 }
