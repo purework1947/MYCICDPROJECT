@@ -24,20 +24,21 @@ pipeline {
         stage('Run Cypress Tests') {
             steps {
                 sh '''
-                  # Clean previous results
-                  rm -rf allure-results
-                  mkdir -p allure-results
+          # Clean previous results
+          rm -rf allure-results
+          mkdir -p allure-results
 
-                  # Run Cypress inside Docker with ANSI colors disabled
-                  docker run --rm \
-                    -e NO_COLOR=1 \
-                    -e FORCE_COLOR=0 \
-                    -v $ALLURE_RESULTS:/app/allure-results \
-                    mycicdproject
+          # Run Cypress Docker container
+          docker run --rm \
+            -e NO_COLOR=1 \
+            -e FORCE_COLOR=0 \
+            -v $ALLURE_RESULTS:/app/allure-results \
+            mycicdproject
 
-                    echo "Allure results content:"
-                    ls -lah allure-results
-                '''
+          # Debug: list files
+          echo "Allure results content:"
+          ls -lah allure-results
+        '''
             }
         }
 
