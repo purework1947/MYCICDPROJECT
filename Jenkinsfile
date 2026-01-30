@@ -3,32 +3,33 @@ pipeline {
 
     environment {
         CYPRESS_RESULTS = "${WORKSPACE}/allure-results"
+        TERM = "xterm"
+        NO_COLOR = "1"
     }
 
     stages {
-        stage('Checkout Code') {
+
+        stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Build Cypress Docker Image') {
+        stage('Build Cypress Image') {
             steps {
-                sh '''
-                docker build --no-cache -t mycicdproject .
-                '''
+                sh 'docker build -t mycicdproject .'
             }
         }
 
         stage('Run Cypress Tests') {
             steps {
                 sh '''
-                # Clean previous results
-                rm -rf allure-results
-                mkdir -p allure-results
+                  rm -rf allure-results
+                  mkdir -p allure-results
 
-                # Run Cypress inside Docker and mount results folder
-                docker run --rm -v $CYPRESS_RESULTS:/app/allure-results mycicdproject
+                  docker run --rm \
+                    -v $CYPRESS_RESULTS:/app/allure-results \
+                    mycicdproject
                 '''
             }
         }
