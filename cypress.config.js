@@ -6,7 +6,7 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       allureWriter(on, config);
       return config;
-    },
+    }
   },
   env: {
     allureResultsPath: "allure-results"

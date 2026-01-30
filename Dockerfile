@@ -1,4 +1,4 @@
-FROM cypress/included:12.17.0
+FROM cypress/included:14.5.4
 
 WORKDIR /app
 
@@ -7,7 +7,6 @@ RUN npm ci --no-audit --no-fund
 
 COPY . .
 
-# Disable ANSI colors
 ENV NO_COLOR=1
 
 CMD ["cypress", "run"]

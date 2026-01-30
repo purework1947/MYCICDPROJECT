@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        CYPRESS_RESULTS = "${WORKSPACE}/allure-results"
-        TERM = "xterm"
-        NO_COLOR = "1"
+        ALLURE_RESULTS = "${WORKSPACE}/allure-results"
+        NO_COLOR = "1"       // disable ANSI colors
+        FORCE_COLOR = "0"    // ensure Node/Cypress don't force colors
     }
 
     stages {
@@ -17,18 +17,22 @@ pipeline {
 
         stage('Build Cypress Image') {
             steps {
-                sh 'docker build -t mycicdproject .'
+                sh 'docker build -t mycicdproject -f Dockerfile.cypress .'
             }
         }
 
         stage('Run Cypress Tests') {
             steps {
                 sh '''
+                  # Clean previous results
                   rm -rf allure-results
                   mkdir -p allure-results
 
+                  # Run Cypress inside Docker with ANSI disabled
                   docker run --rm \
-                    -v $CYPRESS_RESULTS:/app/allure-results \
+                    -e NO_COLOR=1 \
+                    -e FORCE_COLOR=0 \
+                    -v $ALLURE_RESULTS:/app/allure-results \
                     mycicdproject
                 '''
             }
