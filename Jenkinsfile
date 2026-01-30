@@ -19,7 +19,7 @@ pipeline {
 
         stage('Build Cypress Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME -f Dockerfile.cypress .'
+                sh 'docker build -t $IMAGE_NAME -f Dockerfile .'
             }
         }
 
