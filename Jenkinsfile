@@ -34,6 +34,9 @@ pipeline {
                     -e FORCE_COLOR=0 \
                     -v $ALLURE_RESULTS:/app/allure-results \
                     mycicdproject
+
+                    echo "Allure results content:"
+                    ls -lah allure-results
                 '''
             }
         }

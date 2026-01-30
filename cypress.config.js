@@ -9,6 +9,6 @@ module.exports = defineConfig({
     }
   },
   env: {
-    allureResultsPath: "allure-results"
+    allureResultsPath: "/app/allure-results"
   }
 });
