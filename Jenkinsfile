@@ -41,8 +41,12 @@ pipeline {
         stage('Publish Allure Report') {
             steps {
                 allure([
-                    includeProperties: false,
-                    results: [[path: 'allure-results']]
+                   includeProperties: false,
+            results: [[path: 'allure-results']],
+            // Link to the Allure CLI installation you set up in Jenkins
+            commandline: tool(
+                name: 'Allure', 
+                type: 'ru.yandex.qatools.allure.jenkins.tools.AllureCommandlineInstallation'
                 ])
             }
         }
