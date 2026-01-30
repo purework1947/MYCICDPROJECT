@@ -20,6 +20,9 @@ RUN mkdir -p /app/allure-results && chmod -R 777 /app/allure-results
 ENV NO_COLOR=1
 ENV FORCE_COLOR=0
 ENV CYPRESS_allureResultsPath=/app/allure-results
+ENV CYPRESS_allure=true
+
+
 
 # Default command (can be overridden by docker run)
 CMD ["cypress", "run"]

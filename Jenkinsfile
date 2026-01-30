@@ -28,12 +28,13 @@ pipeline {
                   mkdir -p allure-results
 
                   docker run --rm \
-                    -e NO_COLOR=1 \
-                    -e FORCE_COLOR=0 \
-                    -e CYPRESS_allureResultsPath=/app/allure-results \
-                    -v $ALLURE_RESULTS:/app/allure-results \
-                    mycicdproject \
-                    cypress run --spec "cypress/e2e/1-getting-started/todo.cy.js"
+  -e NO_COLOR=1 \
+  -e FORCE_COLOR=0 \
+  -e CYPRESS_allure=true \
+  -e CYPRESS_allureResultsPath=/app/allure-results \
+  -v $ALLURE_RESULTS:/app/allure-results \
+  mycicdproject \
+  cypress run --spec "cypress/e2e/1-getting-started/todo.cy.js"
 
                   echo "Allure results content:"
                   ls -lah allure-results
