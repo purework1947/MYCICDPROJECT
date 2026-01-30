@@ -17,7 +17,7 @@ pipeline {
 
         stage('Build Cypress Image') {
             steps {
-                sh 'docker build -t mycicdproject -f Dockerfile.cypress .'
+               sh 'docker build -t mycicdproject -f Dockerfile.cypress .'
             }
         }
 
