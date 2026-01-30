@@ -4,7 +4,7 @@ pipeline {
     environment {
         ALLURE_RESULTS = "${WORKSPACE}/allure-results"
         NO_COLOR = "1"       // disable ANSI colors
-        FORCE_COLOR = "0"    // ensure Node/Cypress don't force colors
+        FORCE_COLOR = "0"    // ensure Node/Cypress doesn't force colors
     }
 
     stages {
@@ -15,9 +15,9 @@ pipeline {
             }
         }
 
-        stage('Build Cypress Image') {
+        stage('Build Cypress Docker Image') {
             steps {
-        sh 'docker build -t mycicdproject .'
+                sh 'docker build -t mycicdproject .'
             }
         }
 
@@ -28,7 +28,7 @@ pipeline {
                   rm -rf allure-results
                   mkdir -p allure-results
 
-                  # Run Cypress inside Docker with ANSI disabled
+                  # Run Cypress inside Docker with ANSI colors disabled
                   docker run --rm \
                     -e NO_COLOR=1 \
                     -e FORCE_COLOR=0 \
@@ -41,12 +41,13 @@ pipeline {
         stage('Publish Allure Report') {
             steps {
                 allure([
-                   includeProperties: false,
-            results: [[path: 'allure-results']],
-            // Link to the Allure CLI installation you set up in Jenkins
-            commandline: tool(
-                name: 'Allure', 
-                type: 'ru.yandex.qatools.allure.jenkins.tools.AllureCommandlineInstallation'
+                    includeProperties: false,
+                    results: [[path: 'allure-results']],
+                    // Link to the Allure CLI installation in Jenkins
+                    commandline: tool(
+                        name: 'Allure',
+                        type: 'ru.yandex.qatools.allure.jenkins.tools.AllureCommandlineInstallation'
+                    )
                 ])
             }
         }
