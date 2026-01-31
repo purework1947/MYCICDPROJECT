@@ -26,32 +26,28 @@ pipeline {
         }
 
         stage('Run Cypress Tests') {
-            steps {
-                echo "Running Cypress tests inside Docker container..."
-                sh """#!/bin/bash
-# Run Cypress tests in Docker container
+    steps {
+        echo "Running Cypress tests inside Docker container..."
+        sh """#!/bin/bash
+# Run Cypress
 docker run --rm \\
+  -v $WORKSPACE:/app \\
   -v $ALLURE_RESULTS:/app/allure-results \\
   -v $ALLURE_REPORT:/app/allure-report \\
-  -v $WORKSPACE/cypress:/app \\
   $IMAGE_NAME npx cypress run --spec cypress/e2e/1-getting-started/todo.cy.js
 
-# Generate Allure report in Docker container
+# Generate Allure report
 docker run --rm \\
+  -v $WORKSPACE:/app \\
   -v $ALLURE_RESULTS:/app/allure-results \\
   -v $ALLURE_REPORT:/app/allure-report \\
-  $IMAGE_NAME npx allure generate /app/allure-results -o /app/allure-report
+  $IMAGE_NAME npx allure generate /app/allure-results --clean -o /app/allure-report
 
-# Fix permissions for Jenkins
+# Fix permissions
 chmod -R 777 $ALLURE_RESULTS $ALLURE_REPORT
-
-echo "Allure Results:"
-ls -lah $ALLURE_RESULTS
-echo "Allure Report:"
-ls -lah $ALLURE_REPORT
 """
-            }
-        }
+    }
+}
 
         stage('Publish Allure Report') {
             steps {
