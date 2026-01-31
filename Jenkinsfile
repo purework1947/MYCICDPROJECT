@@ -40,6 +40,8 @@ pipeline {
                     -v $WORKSPACE/allure-results:/app/allure-results \
                     -v $WORKSPACE/allure-report:/app/allure-report \
                     $IMAGE_NAME || true
+                     # Fix permissions so Jenkins can read Allure results
+          chmod -R 777 allure-results
 
                   echo "Allure results:"
                   ls -lah allure-results
