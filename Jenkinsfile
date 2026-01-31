@@ -7,6 +7,7 @@ pipeline {
         ALLURE_REPORT  = "${WORKSPACE}/allure-report"
         NO_COLOR = "1"
         FORCE_COLOR = "0"
+        SPEC = "cypress/e2e/1-getting-started/todo.cy.js"
     }
 
     stages {
@@ -34,6 +35,8 @@ pipeline {
                     -e FORCE_COLOR=0 \
                     -e CYPRESS_allure=true \
                     -e CYPRESS_allureResultsPath=/app/allure-results \
+                    -e ALLURE_REPORT=/app/allure-report \
+                    -e SPEC=$SPEC \
                     -v $WORKSPACE/allure-results:/app/allure-results \
                     -v $WORKSPACE/allure-report:/app/allure-report \
                     $IMAGE_NAME || true

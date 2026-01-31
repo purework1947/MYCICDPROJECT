@@ -1,11 +1,15 @@
+# Dockerfile for Jenkins
 FROM jenkins/jenkins:lts
 
 USER root
 
+# Install Docker CLI for Jenkins to trigger Cypress containers
 RUN apt-get update && \
     apt-get install -y docker.io openjdk-11-jdk && \
     apt-get clean
 
+# Set Java environment
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+ENV PATH=$JAVA_HOME/bin:$PATH
 
 USER jenkins
